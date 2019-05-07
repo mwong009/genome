@@ -22,6 +22,10 @@ This software can be configured to automatically estimate both discrete and cont
 Until it is ready, Genome is only suitable for developers who can help to find bugs and issues.
 This software should **not** be used for live production.
 
+## Documentation
+
+Documentation can be found [here](https://genome.readthedocs.io/)
+
 ## Features
 
 * Specify multiple layers for a deep learning based discrete choice model
