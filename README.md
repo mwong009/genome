@@ -2,7 +2,7 @@
 
 # Genome Project
 
-<!---project tags--->
+[![Documentation Status](https://readthedocs.org/projects/genome/badge/?version=latest)](https://genome.readthedocs.io/en/latest/?badge=latest)
 
 ## Overview
 
