@@ -1,13 +1,17 @@
-=================
-Welcome to Genome
-=================
+.. _about:
 
-Genome is a Python library that allows you to develop discrete choice models with machine learning and neural network tools.
+=====
+About
+=====
+
+
+Genome is a Python library that allows you to develop discrete choice models
+with machine learning and neural network tools.
 The goal is to combine cutting edge machine learning techniques with discrete
 choice analysis to allow better and faster model developments.
 This software is specifically built for estimation of travel behaviour data
 sets.
-It is built on the `Theano deep learning library <https://github.com/Theano/Theano/>`_.
+It is built on the It is built on the `Theano deep learning library <https://github.com/Theano/Theano/>`_.
 
 Genome primary interface is a basic command-line script based Python software.
 Using a script allows users to describe a model 'recipe'.
@@ -18,26 +22,17 @@ It allows extremely fast computational speedup using tensor based computations.
 This software can be configured to automatically estimate both discrete and
 continuous output simultaneously.
 
-**Note:** We are currently working towards a 1.0.0 release.
-Until it is ready, Genome is only suitable for developers who can help to find
-bugs and issues.
-This software should **not** be used for live production.
+* **Features**:
 
-News
-====
+  * Specify multiple layers for a deep learning based discrete choice model
+  * Deep learning optimization algorithms (SGD, Adam, N-Momentum, Adagrad)
+  * Supports standard MNL model with reference parameters
+  * Generates estimated parameter tables with standard error calculations
+  * Loglikelihood tracking
 
-* Genome version 0.1.0 (2019/05/03)
 
-Contents
-========
+* **Under Development**:
 
-.. toctree::
-    :maxdepth: 2
-    :caption: User Documentation
-
-    about
-    install
-    tutorials/tutorials
-    development/development
-    contact
-    releasenotes
+  * Generative model implementation
+  * Residual networks
+  * Model saving and reloading
