@@ -38,6 +38,6 @@ Contents
     news
     install
     tutorials/tutorials
-    development/development
-    contact
-    releasenotes
+    .. development/development
+    .. contact
+    .. releasenotes
