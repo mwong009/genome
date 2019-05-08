@@ -42,10 +42,12 @@ Documentation can be found [here](https://genome.readthedocs.io/)
 
 ## Installing
 
-To install the package, run `pip3` on the project directory:
+To install the package:
 
 ```bash
-$ pip3 install --user -r 'requirements.txt' .
+$ git clone https://github.com/mwong009/Genome.git
+$ cd Genome
+$ pip3 install --user .
 ```
 
 To remove package from user directory:

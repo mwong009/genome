@@ -37,7 +37,8 @@ Contents
     about
     news
     install
-    tutorials/tutorials
-    .. development/development
-    .. contact
-    .. releasenotes
+    tutorials/index
+    extending/index
+    development/index
+    faq
+    contact

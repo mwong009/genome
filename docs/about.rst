@@ -21,7 +21,7 @@ It allows extremely fast computational speedup using tensor based computations.
 This software can be configured to automatically estimate both discrete and
 continuous output simultaneously.
 
-* **Features**:
+.. topic:: Features
 
     * Specify multiple layers for a deep learning based discrete choice model
     * Deep learning optimization algorithms (SGD, Adam, N-Momentum, Adagrad)
@@ -30,7 +30,7 @@ continuous output simultaneously.
     * Loglikelihood tracking
 
 
-* **Under Development**:
+.. topic:: Under Development
 
     * Generative model implementation
     * Residual networks
