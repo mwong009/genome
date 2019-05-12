@@ -3,7 +3,6 @@
 # Genome Project
 
 [![Documentation Status](https://readthedocs.org/projects/genome/badge/?version=latest)](https://genome.readthedocs.io/en/latest/?badge=latest)
-
 [![License](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENCE)
 
 ## Overview
