@@ -4,6 +4,8 @@
 
 [![Documentation Status](https://readthedocs.org/projects/genome/badge/?version=latest)](https://genome.readthedocs.io/en/latest/?badge=latest)
 
+[![License](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENCE)
+
 ## Overview
 
 Genome is a Python library that allows you to develop discrete choice models with machine learning and neural network tools.
