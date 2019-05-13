@@ -7,7 +7,7 @@ Genome Project
    :target: https://genome.readthedocs.io/en/latest/?badge=latest
 
 .. |Licence| image:: https://img.shields.io/badge/licence-MIT-blue.svg
-   :target: https://github.com/mwong009/genome/blob/master/LICENCE
+   :target: LICENCE
    
 
 Overview
