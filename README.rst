@@ -1,9 +1,14 @@
 Genome Project
 ==============
 
-`Documentation
-Status <https://genome.readthedocs.io/en/latest/?badge=latest>`__
-`License <LICENCE>`__
+|Document Status| |Licence|
+
+.. |Document Status| image:: https://readthedocs.org/projects/genome/badge/?version=latest
+   :target: https://genome.readthedocs.io/en/latest/?badge=latest
+
+.. |Licence| image:: https://img.shields.io/badge/licence-MIT-blue.svg
+   :target: https://github.com/mwong009/genome/blob/master/LICENCE
+   
 
 Overview
 --------
