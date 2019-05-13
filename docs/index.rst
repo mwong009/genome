@@ -28,17 +28,17 @@ News
 
 * Genome version 0.1.0 (2019/05/03)
 
-Contents
-========
+Table of Contents
+=================
 
 .. toctree::
     :maxdepth: 2
 
     about
-    news
     install
     tutorials/index
     extending/index
     development/index
     faq
+    release
     contact

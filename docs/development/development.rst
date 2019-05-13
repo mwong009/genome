@@ -8,6 +8,16 @@ Discussion on development takes place in the
 If you find a bug in the code or if some component of the software is not working as expected, please report it so that it can be fixed as soon as possible.
 Feedback from end-users are valuable to maintain quality of the code.
 
+Reporting issues
+~~~~~~~~~~~~~~~~
+
+* Describe what you expected to happen.
+* If possible, include a minimal, complete, and verifiable example to help us
+  identify the issue. This also helps check that the issue is not with your own
+  code.
+* Describe what actually happened. Include the full traceback if there was an
+  exception.
+
 Github repository
 ~~~~~~~~~~~~~~~~~
 
@@ -30,19 +40,24 @@ Workflow
 
     $ git push --set-upstream origin <branch name>
 
-* Go to your github repository and submit a merge request to the project repository
-* Provide a descriptive title and informative comments in the merge request form
+* Go to your github repository and submit a merge request to the project
+  repository
+* Provide a descriptive title and informative comments in the merge request
+  form
 * Wait for feedback from the developers
-* Once the developers are satisfied with the merge request, your changes will be pushed onto the master branch
+* Once the developers are satisfied with the merge request, your changes will
+  be pushed onto the master branch
 * (optional) delete your local branch
 
-At some point someone will take a look at your changes and merge it to the project branch if the change looks good.
+At some point someone will take a look at your changes and merge it to the
+project branch if the change looks good.
 
 Code Review
 ~~~~~~~~~~~
 
 Before you start working on a new feature, please follow proper `Coding Conventions <https://www.python.org/dev/peps/pep-0008/>`_.
-Most small changes are fine and can be merges right away, but for major changes or new features, proper coding standards are required.
+Most small changes are fine and can be merges right away, but for major
+changes or new features, proper coding standards are required.
 
 Other good coding style guide suggestions
 
