@@ -1,7 +1,3 @@
-=================
-Welcome to Genome
-=================
-
 Genome is a Python library that allows you to develop discrete choice models with machine learning and neural network tools.
 The goal is to combine cutting edge machine learning techniques with discrete
 choice analysis to allow better and faster model developments.
@@ -28,11 +24,12 @@ News
 
 * Genome version 0.1.0 (2019/05/03)
 
-Table of Contents
+Welcome to Genome
 =================
 
 .. toctree::
     :maxdepth: 2
+    :caption: Contents:
 
     about
     install
@@ -42,4 +39,13 @@ Table of Contents
     faq
     release
     contact
-    licence/theano_licence
+    api/modules
+
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
