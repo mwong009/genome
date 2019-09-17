@@ -42,3 +42,4 @@ Table of Contents
     faq
     release
     contact
+    licence/theano_licence
