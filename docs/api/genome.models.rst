@@ -1,4 +1,4 @@
-genome.models module
+:mod:`genome.models`
 ====================
 
 .. automodule:: genome.models

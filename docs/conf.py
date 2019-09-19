@@ -31,6 +31,7 @@ pygments_style = 'sphinx'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.inheritance_diagram',
     'sphinx.ext.napoleon',
     'sphinx.ext.coverage'
 ]

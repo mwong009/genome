@@ -1,4 +1,4 @@
-genome.optimizers module
+:mod:`genome.optimizers`
 ========================
 
 .. automodule:: genome.optimizers
