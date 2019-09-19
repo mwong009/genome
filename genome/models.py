@@ -1,80 +1,128 @@
-""" The core module of the project
-"""
-
+"""Model constructors"""
 
 import numpy as np
 import theano
-import theano.tensor as TT
+import theano.tensor as T
 
-__license__ = "MIT"
-__revision__ = "0.0.1"
-__docformat__ = "reStructuredText"
 
 FLOATX = theano.config.floatX
 
 
 class BaseModel:
-    """BaseModel
+    """The BaseModel class creates the backbone of the other models
 
-    The BaseModel class creates the backbone of the other models
+    Common methods shared between model types are defined here
 
     Args:
         input (theano.tensor.TensorVariable): symbolic variable that describes the
             input
-        output (theano.tensor.TensorVariable): symbolic variable that describes the
-            output
     """
-    def __init__(self, input, output):
+    def __init__(self, input):
         self.input = input
-        self.output = output
 
-    def negative_log_likelihood(self, y, mean=True):
-        """Returns the mean or sum of the negative log likelihood
+
+class MultiLayerModel:
+    """Base class for multi-layered models
+
+    Args:
+        input (theano.tensor.TensorVariable): symbolic variable that describes the
+            input
+        n_in (int): Number of input nodes.
+        n_out (int): Number of output nodes.
+        layers ([(int, int),...]): A list of tuples that defines the number of
+            input connection, output connection and layer activation function:
+            `[(n_in, n_hidden, activation),... (n_hidden, n_out, activation)]`.
+    """
+    def __init__(self, input, n_in, n_out, layers):
+        self.input = input
+
+        assert isinstance(layers, list)
+        self.n_layers = len(layers)
+
+        for n, layer in enumerate(layers):
+            assert (len(layer) >= 2 & len(layer) <= 3)
+            if len(layer) == 2:
+                layers[n] = layers[n] + (None,)
+            else:
+                assert callable(layer[2])
+            if n == 0:
+                assert layer[0] == n_in
+            else:
+                assert layer[0] == layers[n-1][1]
+            if n == self.n_layers-1:
+                assert layer[1] == n_out
+        self.layers = layers
+
+        self.hidden_layers = []
+        self.params = []
+        self.params_m = []
+
+
+class LinearRegression(object):
+    """Creates a Linear Regression model
+
+    This class creates a generic linear regression model: y = Wx + b.
+
+    Args:
+        input (theano.tensor.TensorVariable): Symbolic variable that describes the
+            input.
+        n_vars (int): Number of input variables.
+        W (TensorSharedVariable, optional): Slope parameters.
+        b (TensorSharedVariable, optional): Intercept parameter.
+    """
+    def __init__(self, input, n_vars, W=None, b=None):
+        self.input = input
+
+        if W is None:
+            init = np.zeros((n_vars, 1), dtype=FLOATX)
+            W = theano.shared(value=init, name='W', borrow=True)
+        self.W = W
+
+        if b is None:
+            init = np.zeros((1,), dtype=FLOATX)
+            b = theano.shared(value=init, name='b', borrow=True)
+        self.b = b
+
+        self.params = [self.W, self.b]
+        self.params_m = [None, None]
+
+        self.output = T.dot(input, self.W) + self.b
+
+    def mean_squared_error(self, y):
+        """Returns a float representing the mean squared error (MSE)
 
         Args:
-            y (theano.tensor.TensorVariable): symbolic variable that describe the
-                output
+            y (theano.tensor.TensorVariable): corresponds to the ground-truth value
+                of the dependent variable
         Returns:
-            TensorSharedVariable: negative log-likelihood of the mini-batch
+            TensorSharedVariable: The MSE of the linear model
         """
-        # y.shape[0] is the mini-batch size
-        nll = -TT.sum(TT.log(self.output)[TT.arange(y.shape[0]), y])
-        if not mean:
-            return nll
+        # check if y is of the correct datatype
+        if y.dtype.startswith('float'):
+            return T.mean(T.sqr(y - self.output[..., 0]))
         else:
-            return nll / y.shape[0]
-
-
-class LinearRegression(BaseModel):
-    """Linear Regression Class"""
-    def __init__(self, input, output, ):
-        assert output.ndim == 2
+            raise NotImplementedError()
 
 
 class HiddenLayer(object):
     """Hidden Layer class object
 
     This abstract class is used for a wrapper for intermediate layers. Common activation
-    function used are T.nnet.sigmoid, T.nnet.softplus, T.nnet.relu, T.tanh.
+    function used are `T.nnet.sigmoid`, `T.nnet.softplus`, `T.nnet.relu`, `T.tanh`.
 
     Args:
-        input (theano.tensor.TensorVariable): symbolic variable that describes the
-            input
-        n_in (int): number of input nodes
-        n_out (int): number of output nodes
-        W (TensorSharedVariable, optional): weight parameters
-        bias (TensorSharedVariable, optional): bias parameters
-        activation (function, optional): activation function, defaults to linear
-        regression if undefined
+        input (theano.tensor.TensorVariable): Symbolic variable that describes the
+            input.
+        n_in (int): Number of input nodes.
+        n_out (int): Number of output nodes.
+        W (TensorSharedVariable, optional): Weight parameters.
+        bias (TensorSharedVariable, optional): Bias parameters.
+        activation (function, optional): Activation function, defaults to linear
+            regression if undefined.
     """
     def __init__(self, input, n_in, n_out, W=None, bias=None, activation=None):
         self.input = input
         self.activation = activation
-
-        if bias is None:
-            init = np.zeros((n_out,), dtype=FLOATX)
-            bias = theano.shared(value=init, name='bias', borrow=True)
-        self.bias = bias
 
         if W is None:
             init = np.zeros((n_in, n_out), dtype=FLOATX)
@@ -84,18 +132,23 @@ class HiddenLayer(object):
         self._W = _W
         self.W = W
 
+        if bias is None:
+            init = np.zeros((n_out,), dtype=FLOATX)
+            bias = theano.shared(value=init, name='bias', borrow=True)
+        self.bias = bias
+
         self.params = [self._W, self.bias]
 
-        W_m = np.ones_like(np.zeros((n_in, n_out), dtype=FLOATX))
-        W_m[..., -1] = 0
-        W_m = W_m.flatten()
+        self.W_m = np.ones_like(np.zeros((n_in, n_out), dtype=FLOATX))
+        self.W_m[..., -1] = 0
+        self.W_m = self.W_m.flatten()
 
-        bias_m = np.ones_like(np.zeros((n_out,), dtype=FLOATX))
-        bias_m[..., -1] = 0
+        self.bias_m = np.ones_like(np.zeros((n_out,), dtype=FLOATX))
+        self.bias_m[..., -1] = 0
 
-        self.params_m = [W_m, bias_m]
+        self.params_m = [self.W_m, self.bias_m]
 
-        lin_output = TT.dot(input, self.W) + self.bias
+        lin_output = T.dot(input, self.W) + self.bias
 
         if self.activation is None:
             self.output = lin_output
@@ -104,9 +157,44 @@ class HiddenLayer(object):
             self.output = self.activation(lin_output)
 
 
-class MLP(object):
-    def __init__(self, *args, **kwargs):
-        pass
+class MLP(MultiLayerModel):
+    """Creates the Multilayer perceptron model
+
+    Args:
+        input (theano.tensor.TensorVariable): Symbolic variable that describes the
+            input.
+        n_in (int): Number of input nodes.
+        n_out (int): Number of output nodes.
+        layers ([(int, int),...]): A list of tuples that defines the number of
+            input connection, output connection and layer activation function:
+            `[(n_in, n_hidden, activation),... (n_hidden, n_out, activation)]`.
+    """
+    def __init__(self, input, n_in, n_out, layers):
+        """Initializes the MLP model"""
+        super().__init__(input, n_in, n_out, layers)
+
+        for n, layer in enumerate(self.layers):
+            layer_n_in = layer[0]
+            layer_n_out = layer[1]
+            layer_activaton = layer[2]
+            if n == 0:
+                layer_input = self.input
+            else:
+                layer_input = self.hidden_layers[n-1].output
+
+            hidden_layer = HiddenLayer(
+                input=layer_input, n_in=layer_n_in, n_out=layer_n_out,
+                activation=layer_activaton
+            )
+
+            self.hidden_layers.append(hidden_layer)
+            self.params.extend(hidden_layer.params)
+            self.params_m.extend(hidden_layer.params_m)
+
+            self.output = self.hidden_layers[-1].output
+
+            if self.hidden_layers[n-1].activation == T.nnet.softmax:
+                self.output_pred = T.argmax(self.output, axis=1)
 
 
 class ResNet(MLP):
@@ -116,20 +204,19 @@ class ResNet(MLP):
 
 
 class MultinomialLogit(BaseModel):
-    """Initializes the Logit class
+    """Creates the standard Multinomial Logit model
 
     Args:
         input (theano.tensor.TensorVariable): symbolic variable that describes the
             input
-        output (theano.tensor.TensorVariable): symbolic variable that describes the
-            output
         n_vars (int): number of input variables
         n_choices (int): number of choice alternatives
         beta (TensorSharedVariable, optional): beta parameters
         asc (TensorSharedVariable, optional): alternative specific constants
     """
-    def __init__(self, input, output, n_vars, n_choices, beta=None, asc=None):
-        super().__init__(input, output)
+    def __init__(self, input, n_vars, n_choices, beta=None, asc=None):
+        """Initializes the Logit class"""
+        super().__init__(input)
 
         if asc is None:
             init = np.zeros((n_choices,), dtype=FLOATX)
@@ -146,17 +233,34 @@ class MultinomialLogit(BaseModel):
 
         self.params = [self._beta, self.asc]
 
-        beta_m = np.ones_like(np.zeros((n_vars, n_choices), dtype=FLOATX))
-        beta_m[..., -1] = 0
-        beta_m = beta_m.flatten()
+        self.beta_m = np.ones_like(np.zeros((n_vars, n_choices), dtype=FLOATX))
+        self.beta_m[..., -1] = 0
+        self.beta_m = self.beta_m.flatten()
 
-        asc_m = np.ones_like(np.zeros((n_choices,), dtype=FLOATX))
-        asc_m[..., -1] = 0
+        self.asc_m = np.ones_like(np.zeros((n_choices,), dtype=FLOATX))
+        self.asc_m[..., -1] = 0
 
-        self.params_m = [beta_m, asc_m]
+        self.params_m = [self.beta_m, self.asc_m]
 
-        self.output_prob = TT.nnet.softmax(TT.dot(input, self.beta) + self.asc)
-        self.output_pred = TT.argmax(self.output_prob, axis=1)
+        self.output = T.nnet.softmax(T.dot(input, self.beta) + self.asc)
+        self.output_pred = T.argmax(self.output, axis=1)
+
+    def negative_log_likelihood(self, y, mean=True):
+        """Returns the mean or sum of the negative log likelihood
+
+        Args:
+            y (theano.tensor.TensorVariable): symbolic variable that describe the
+                ground-truth
+            mean (bool): checks whether to average `True` the negative log-likelihood
+        Returns:
+            TensorSharedVariable: negative log-likelihood of the mini-batch
+        """
+        # y.shape[0] is the mini-batch size
+        nll = -T.sum(T.log(self.output)[T.arange(y.shape[0]), y])
+        if not mean:
+            return nll
+        else:
+            return nll / y.shape[0]
 
     def errors(self, y):
         """Returns a float representing the errors in the minibatch
@@ -168,13 +272,13 @@ class MultinomialLogit(BaseModel):
             TensorSharedVariable: The mean error rate of predictions
         """
         # check if y has same dimension of y_pred
-        if y.ndim != self.output_pred.ndim:
+        if y.ndim != self.output.ndim:
             raise TypeError('y should have the same shape as self.output_pred',
-                            ('y', y.type, 'y_pred', self.output_pred.type))
+                            ('y', y.type, 'output_pred', self.output_pred.type))
 
         # check if y is of the correct datatype
         if y.dtype.startswith('int'):
-            return TT.mean(TT.neq(self.output_pred, y))
+            return T.mean(T.neq(self.output_pred, y))
         else:
             raise NotImplementedError()
 
@@ -192,7 +296,7 @@ class MultinomialLogit(BaseModel):
         for param in self.params:
             _shp = param.shape
             cost_function = self.negative_log_likelihood(y)
-            _hessian = TT.hessian(cost_function, param, disconnected_inputs='ignore')
+            _hessian = T.hessian(cost_function, param, disconnected_inputs='ignore')
             hessian_matrix.append(_hessian.reshape(_shp))
 
         return hessian_matrix
