@@ -18,7 +18,7 @@ class LinearRegression(base.BaseModel):
     This class creates a generic linear regression model: y = Wx + b.
 
     Args:
-        input (:obj:`theano.tensor.TensorVariable`): Symbolic variable that describes
+        input (:obj:`TensorVariable`): Symbolic variable that describes
             the input.
         n_vars (int): Number of input variables.
         W (:obj:`TensorSharedVariable`, optional): Slope parameters.
@@ -48,7 +48,7 @@ class LinearRegression(base.BaseModel):
         Returns a float representing the mean squared error (MSE)
 
         Args:
-            y (:obj:`theano.tensor.TensorVariable`): corresponds to the ground-truth
+            y (:obj:`TensorVariable`): corresponds to the ground-truth
                 value of the dependent variable
         Returns:
             The MSE of the linear model
@@ -66,7 +66,7 @@ class MLP(base.MultiLayerModel):
     Creates the Multilayer perceptron model
 
     Args:
-        input (:obj:`theano.tensor.TensorVariable`): Symbolic variable that describes
+        input (:obj:`TensorVariable`): Symbolic variable that describes
             the input.
         n_in (int): Number of input nodes.
         n_out (int): Number of output nodes.
@@ -112,7 +112,7 @@ class MultinomialLogit(base.BaseModel):
     Creates the standard Multinomial Logit model
 
     Args:
-        input (:obj:`theano.tensor.TensorVariable`): symbolic variable that describes
+        input (:obj:`TensorVariable`): symbolic variable that describes
             the input
         n_vars (int): number of input variables
         n_choices (int): number of choice alternatives
@@ -155,7 +155,7 @@ class MultinomialLogit(base.BaseModel):
         Returns the mean or sum of the negative log likelihood
 
         Args:
-            y (:obj:`theano.tensor.TensorVariable`): symbolic variable that describe the
+            y (:obj:`TensorVariable`): symbolic variable that describe the
                 ground-truth
             mean (bool): checks whether to average `True` the negative log-likelihood
 
@@ -174,7 +174,7 @@ class MultinomialLogit(base.BaseModel):
         Returns a float representing the errors in the minibatch
 
         Args:
-            y (theano.tensor.TensorVariable): corresponds to the ground-truth vector
+            y (TensorVariable): corresponds to the ground-truth vector
                 that gives the correct response
 
         Returns:
@@ -217,7 +217,7 @@ class ResLogit(MultinomialLogit, base.ResNetModel):
     Creates the ResLogit model
 
     Args:
-        input (:obj:`theano.tensor.TensorVariable`): symbolic variable that describes
+        input (:obj:`TensorVariable`): symbolic variable that describes
             the input
         n_vars (int): number of input variables
         n_choices (int): number of choice alternatives
