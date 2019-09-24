@@ -17,8 +17,8 @@ class HiddenLayer:
     function used are `T.nnet.sigmoid`, `T.nnet.softplus`, `T.nnet.relu`, `T.tanh`.
 
     Args:
-        input (theano.tensor.TensorVariable): Symbolic variable that describes the
-            input.
+        input (:obj:`theano.tensor.TensorVariable`): Symbolic variable that describes
+            the input.
         n_in (int): Number of input nodes.
         n_out (int): Number of output nodes.
         layer_num (int): The n-th layer of the neural network.

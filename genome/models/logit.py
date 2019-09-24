@@ -18,11 +18,11 @@ class LinearRegression(base.BaseModel):
     This class creates a generic linear regression model: y = Wx + b.
 
     Args:
-        input (theano.tensor.TensorVariable): Symbolic variable that describes the
-            input.
+        input (:obj:`theano.tensor.TensorVariable`): Symbolic variable that describes
+            the input.
         n_vars (int): Number of input variables.
-        W (TensorSharedVariable, optional): Slope parameters.
-        b (TensorSharedVariable, optional): Intercept parameter.
+        W (:obj:`TensorSharedVariable`, optional): Slope parameters.
+        b (:obj:`TensorSharedVariable`, optional): Intercept parameter.
 
     """
     def __init__(self, input, n_vars, W=None, b=None):
@@ -48,8 +48,8 @@ class LinearRegression(base.BaseModel):
         Returns a float representing the mean squared error (MSE)
 
         Args:
-            y (theano.tensor.TensorVariable): corresponds to the ground-truth value
-                of the dependent variable
+            y (:obj:`theano.tensor.TensorVariable`): corresponds to the ground-truth
+                value of the dependent variable
         Returns:
             The MSE of the linear model
 
@@ -70,10 +70,10 @@ class MLP(base.MultiLayerModel):
             the input.
         n_in (int): Number of input nodes.
         n_out (int): Number of output nodes.
-        layers ([(int, int, None), (int, int, None),...]): A list of tuples that
+        layers (``[(int, int, None), (int, int, None),...]``): A list of tuples that
             defines the number of input connection, output connection and layer
             activation function:
-            :obj:`[(n_in, n_hidden, activation),... (n_hidden, n_out, activation)]`.
+            ``[(n_in, n_hidden, activation),... (n_hidden, n_out, activation)]``.
 
     Example:
         >>> x = T.matrix('x')
