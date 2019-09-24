@@ -1,5 +1,5 @@
 """
-Model constructors
+Model constructors.
 
 """
 from genome.models import base, core
@@ -12,7 +12,8 @@ FLOATX = theano.config.floatX
 
 
 class LinearRegression(base.BaseModel):
-    """Creates a Linear Regression model
+    """
+    Creates a Linear Regression model
 
     This class creates a generic linear regression model: y = Wx + b.
 
@@ -22,6 +23,7 @@ class LinearRegression(base.BaseModel):
         n_vars (int): Number of input variables.
         W (TensorSharedVariable, optional): Slope parameters.
         b (TensorSharedVariable, optional): Intercept parameter.
+
     """
     def __init__(self, input, n_vars, W=None, b=None):
         super().__init__(input)
@@ -42,13 +44,15 @@ class LinearRegression(base.BaseModel):
         self.output = T.dot(input, self.W) + self.b
 
     def mean_squared_error(self, y):
-        """Returns a float representing the mean squared error (MSE)
+        """
+        Returns a float representing the mean squared error (MSE)
 
         Args:
             y (theano.tensor.TensorVariable): corresponds to the ground-truth value
                 of the dependent variable
         Returns:
             The MSE of the linear model
+
         """
         # check if y is of the correct datatype
         if y.dtype.startswith('float'):
@@ -114,6 +118,7 @@ class MultinomialLogit(base.BaseModel):
         n_choices (int): number of choice alternatives
         beta (:obj:`TensorSharedVariable`, optional): beta parameters
         asc (:obj:`TensorSharedVariable`, optional): alternative specific constants
+
     """
     def __init__(self, input, n_vars, n_choices, beta=None, asc=None):
         super().__init__(input)
