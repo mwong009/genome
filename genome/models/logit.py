@@ -5,8 +5,8 @@ Model constructors.
 from genome.models import base, core
 
 import numpy as np
-import theano
-import theano.tensor as T
+# import theano
+# import theano.tensor as T
 
 FLOATX = theano.config.floatX
 
