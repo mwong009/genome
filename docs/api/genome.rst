@@ -1,17 +1,17 @@
-genome package
-==============
-
-Submodules
-----------
+:mod:`genome`
+=============
 
 .. toctree::
 
    genome.models
+
+
+.. toctree::
+
    genome.optimizers
+   genome.stats
    genome.utils
 
-Module contents
----------------
 
 .. automodule:: genome
    :members:
