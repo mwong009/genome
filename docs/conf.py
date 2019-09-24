@@ -80,5 +80,5 @@ latex_elements = {
 # -- Options for autodoc -----------------------------------------------------
 
 autodoc_default_options = {
-    'undoc-members': False
+    'undoc-members': True
 }
