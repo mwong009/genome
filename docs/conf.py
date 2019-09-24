@@ -82,3 +82,6 @@ latex_elements = {
 autodoc_default_options = {
     'undoc-members': True
 }
+
+
+autodoc_mock_imports = ["theano"]
