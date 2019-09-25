@@ -1,7 +1,7 @@
 .. _tutorials:
 
-Tutorials
-=========
+Usage
+=====
 
 Prerequisites
 -------------
@@ -25,6 +25,7 @@ Basics
 .. toctree::
     :maxdepth: 2
 
+    quickstart
     basics
 
 About this Tutorial
