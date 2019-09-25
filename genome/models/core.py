@@ -14,18 +14,18 @@ class HiddenLayer:
     Hidden Layer class object
 
     This abstract class is used for a wrapper for intermediate layers. Common activation
-    function used are `T.nnet.sigmoid`, `T.nnet.softplus`, `T.nnet.relu`, `T.tanh`.
+    function used are :class:`T.nnet.sigmoid`, :class:`T.nnet.softplus`,
+    :class:`T.nnet.relu`, :class:`T.tanh`.
 
     Args:
-        input (:obj:`TensorVariable`): Symbolic variable that describes
-            the input.
-        n_in (int): Number of input nodes.
-        n_out (int): Number of output nodes.
-        layer_num (int): The n-th layer of the neural network.
-        W (:obj:`TensorSharedVariable`, optional): Weight parameters.
-        bias (:obj:`TensorSharedVariable`, optional): Bias parameters.
-        activation (:obj:`function`, optional): Activation function, defaults to linear
-            regression if undefined.
+        input: A symbolic ``Tensor`` input
+        n_in (int): Number of input variables.
+        n_out (int): Number of output variables.
+        layer_num (int): The n-th layer of the neural network
+        W: Weight parameters - A ``TensorSharedVariable`` (optional)
+        bias: Bias parameters - A ``TensorSharedVariable`` (optional)
+        activation: Activation function, example :class:`T.nnet.softplus`,
+            defaults to linear regression if undefined
 
     """
     def __init__(self, input, n_in, n_out, layer_num, W=None, bias=None,
@@ -75,11 +75,10 @@ class ResNetLayer:
     Reason -- no logical reason to do so.
 
     Args:
-        input (:obj:`TensorVariable`): symbolic variable that describes
-            the input.
-        size (``n x n`` tuple): The shape of the residual correlation matrix.
-        layer_num (int): The n-th layer of the neural network.
-        W (:obj:`TensorSharedVariable`, optional): Weight parameters.
+        input: A symbolic ``Tensor`` input
+        size (tuple(int, int)): The shape of the residual correlation matrix
+        layer_num (int): The n-th layer of the neural network
+        W: Weight parameters - A ``TensorSharedVariable`` (optional)
 
     """
     def __init__(self, input, size, layer_num, W=None):

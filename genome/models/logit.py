@@ -13,16 +13,15 @@ FLOATX = theano.config.floatX
 
 class LinearRegression(base.BaseModel):
     """
-    Creates a Linear Regression model
+    Initializes a Linear Regression model
 
     This class creates a generic linear regression model: y = Wx + b.
 
     Args:
-        input (:obj:`TensorVariable`): Symbolic variable that describes
-            the input.
-        n_vars (int): Number of input variables.
-        W (:obj:`TensorSharedVariable`, optional): Slope parameters.
-        b (:obj:`TensorSharedVariable`, optional): Intercept parameter.
+        input: A symbolic ``Tensor`` input
+        n_vars (int): Number of input variables
+        W: Slope parameters - A ``TensorSharedVariable`` (optional)
+        b: Intercept parameter - A ``TensorSharedVariable`` (optional)
 
     """
     def __init__(self, input, n_vars, W=None, b=None):
@@ -45,11 +44,10 @@ class LinearRegression(base.BaseModel):
 
     def mean_squared_error(self, y):
         """
-        Returns a float representing the mean squared error (MSE)
+        Returns a `float` representing the mean squared error (MSE)
 
         Args:
-            y (:obj:`TensorVariable`): corresponds to the ground-truth
-                value of the dependent variable
+            y: A symbolic ``Tensor`` variable of the ground-truth
         Returns:
             The MSE of the linear model
 
@@ -63,17 +61,16 @@ class LinearRegression(base.BaseModel):
 
 class MLP(base.MultiLayerModel):
     """
-    Creates the Multilayer perceptron model
+    Initializes a Multilayer perceptron model
 
     Args:
-        input (:obj:`TensorVariable`): Symbolic variable that describes
-            the input.
-        n_in (int): Number of input nodes.
-        n_out (int): Number of output nodes.
-        layers (``[(int, int, None), (int, int, None),...]``): A list of tuples that
-            defines the number of input connection, output connection and layer
-            activation function:
-            ``[(n_in, n_hidden, activation),... (n_hidden, n_out, activation)]``.
+        input: A symbolic ``Tensor`` input
+        n_in (int): Number of input variables
+        n_out (int): Number of output variables
+        layers (list): A list of tuples of ``TensorSharedVariable`` that defines the
+            number of input connection, output connection and layer activation function,
+            for example: ``[(n_in, n_hidden, activation),... (n_hidden, n_out,
+            activation)]``
 
     Example:
         >>> x = T.matrix('x')
@@ -109,15 +106,14 @@ class MLP(base.MultiLayerModel):
 
 class MultinomialLogit(base.BaseModel):
     """
-    Creates the standard Multinomial Logit model
+    Initializes a standard `Multinomial Logit` (MNL) model
 
     Args:
-        input (:obj:`TensorVariable`): symbolic variable that describes
-            the input
-        n_vars (int): number of input variables
-        n_choices (int): number of choice alternatives
-        beta (:obj:`TensorSharedVariable`, optional): beta parameters
-        asc (:obj:`TensorSharedVariable`, optional): alternative specific constants
+        input: A symbolic ``Tensor`` input
+        n_vars (int): Number of input variables
+        n_choices (int): Number of choice alternatives
+        beta: :math:`\\beta` parameters - A ``TensorSharedVariable`` (optional)
+        asc: Alternative Specific Constants - A ``TensorSharedVariable`` (optional)
 
     """
     def __init__(self, input, n_vars, n_choices, beta=None, asc=None):
@@ -155,8 +151,7 @@ class MultinomialLogit(base.BaseModel):
         Returns the mean or sum of the negative log likelihood
 
         Args:
-            y (:obj:`TensorVariable`): symbolic variable that describe the
-                ground-truth
+            y: A symbolic ``Tensor`` variable of the ground-truth
             mean (bool): checks whether to average `True` the negative log-likelihood
 
         Returns:
@@ -171,11 +166,10 @@ class MultinomialLogit(base.BaseModel):
 
     def errors(self, y):
         """
-        Returns a float representing the errors in the minibatch
+        Returns a `float` representing the errors in the minibatch
 
         Args:
-            y (TensorVariable): corresponds to the ground-truth vector
-                that gives the correct response
+            y: A symbolic ``Tensor`` variable of the ground-truth
 
         Returns:
             The mean error rate of predictions
@@ -196,11 +190,11 @@ class MultinomialLogit(base.BaseModel):
         Return a list of hessians w.r.t. to the model parameters
 
         Args:
-            y (:obj:`TensorSharedVariable`): corresponds to the ground-truth vector
-                that gives the correct response
+            y: A symbolic ``Tensor`` variable of the ground-truth
 
         Returns:
-            A list of hessian matrix corresponding to each parameter
+            A list of hessian ``TensorSharedVariable`` matrices corresponding to each
+                parameter
         """
         hessian_matrix = []
         for param in self.params:
@@ -212,23 +206,29 @@ class MultinomialLogit(base.BaseModel):
         return hessian_matrix
 
 
-class ResLogit(MultinomialLogit, base.ResNetModel):
+class ResLogit(MultinomialLogit):
     """
-    Creates the ResLogit model
+    Initializes a ResLogit model
+
+    The ResLogit model consists of a series of residual blocks that captures the
+    heterogeneity in the data. It is an extension of the :class:`MultinomialLogit`
+    class.
 
     Args:
-        input (:obj:`TensorVariable`): symbolic variable that describes
-            the input
-        n_vars (int): number of input variables
-        n_choices (int): number of choice alternatives
-        n_layers (int): Number of residual layers.
-        beta (:obj:`TensorSharedVariable`, optional): beta parameters
-        asc (:obj:`TensorSharedVariable`, optional): alternative specific constants
+        input: A symbolic ``Tensor`` input
+        n_vars (int): Number of input variables
+        n_choices (int): Number of choice alternatives
+        n_layers (int): Number of residual layers
+        beta: :math:`\\beta` parameters - A ``TensorSharedVariable`` (optional)
+        asc: Alternative Specific Constants - A ``TensorSharedVariable`` (optional)
 
     """
     def __init__(self, input, n_vars, n_choices, n_layers, beta=None, asc=None):
         MultinomialLogit.__init__(self, input, n_vars, n_choices, beta, asc)
-        base.ResNetModel.__init__(self, n_layers)
+
+        self.n_layers = n_layers
+        assert self.n_layers >= 2
+        self.resnet_layers = []
 
         resnet_input = T.dot(self.input, self.beta)
 
