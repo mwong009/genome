@@ -14,9 +14,12 @@ FLOATX = theano.config.floatX
 
 
 class BaseOpt:
-    def __init__(self, params, learning_rate):
+    def __init__(self, params, learning_rate, consider_constants):
         assert isinstance(params, list)
         assert learning_rate > 0
+
+        self.learning_rate = learning_rate
+        self.consider_constants = consider_constants
 
     def set_learning_rate(self, lr):
         self.learning_rate = lr
@@ -41,9 +44,7 @@ class SGD(BaseOpt):
         params (list): A list of ``TensorSharedVariable`` model parameters
     """
     def __init__(self, params, learning_rate=0.1, consider_constants=None):
-        super().__init__(params, learning_rate)
-        self.learning_rate = learning_rate
-        self.consider_constants = consider_constants
+        super().__init__(params, learning_rate, consider_constants)
 
     def update(self, cost, params):
         grads = []
@@ -61,8 +62,9 @@ class SGD(BaseOpt):
 
 class MomentumSGD(BaseOpt):
     def __init__(self, params, learning_rate=0.1, momentum=0.9,
-                 consider_constants=None, use_nesterov=True):
-        super().__init__(params, learning_rate)
+                 consider_constants=None, use_nesterov=False):
+        super().__init__(params, learning_rate, consider_constants)
+
         assert (momentum < 1.) & (momentum > 0)
         self.momentum = momentum
         self.use_nestrov = use_nesterov
@@ -100,8 +102,8 @@ class MomentumSGD(BaseOpt):
 
 
 class Adagrad(BaseOpt):
-    def __init__(self, params, learning_rate=0.01):
-        super().__init__(params, learning_rate)
+    def __init__(self, params, learning_rate=1., consider_constants=None):
+        super().__init__(params, learning_rate, consider_constants)
 
         self.velocity = []
         for param in params:
@@ -129,8 +131,8 @@ class Adagrad(BaseOpt):
 
 
 class RMSProp(BaseOpt):
-    def __init__(self, params, learning_rate=1.0, rho=0.9):
-        super().__init__(params, learning_rate)
+    def __init__(self, params, learning_rate=0.1, rho=0.9, consider_constants=None):
+        super().__init__(params, learning_rate, consider_constants)
         self.rho = rho
         assert (self.rho < 1.) & (self.rho > 0.)
 
@@ -160,8 +162,8 @@ class RMSProp(BaseOpt):
 
 
 class Adadelta(BaseOpt):
-    def __init__(self, params, learning_rate=1.0, rho=0.95):
-        super().__init__(params, learning_rate)
+    def __init__(self, params, learning_rate=1.0, rho=0.95, consider_constants=None):
+        super().__init__(params, learning_rate, consider_constants)
         self.rho = rho
         assert (self.rho < 1.) & (self.rho > 0.)
 
@@ -202,8 +204,9 @@ class Adadelta(BaseOpt):
 
 
 class Adam(BaseOpt):
-    def __init__(self, params, learning_rate=0.001, beta_1=0.9, beta_2=0.999):
-        super().__init__(params, learning_rate)
+    def __init__(self, params, learning_rate=1., beta_1=0.9, beta_2=0.999,
+                 consider_constants=None):
+        super().__init__(params, learning_rate, consider_constants)
 
         self.velocity = []
         self.delta = []
@@ -230,7 +233,7 @@ class Adam(BaseOpt):
         delta = self.delta
 
         updates = []
-        t = self.step + 1
+        t = self.step + T.constant(1.)
         updates.append((self.step, t))
         for v, d, param, grad in zip(velocity, delta, params, grads):
             v_t = self.beta_1 * v + (1. - self.beta_1) * grad
@@ -242,6 +245,6 @@ class Adam(BaseOpt):
             v_hat = v_t / (1. - self.beta_1 ** t)
             d_hat = d_t / (1. - self.beta_2 ** t)
             update = param - self.learning_rate * v_hat / (T.sqrt(d_hat) + epsilon)
-            updates.append((d, d_t))
+            updates.append((param, update))
 
         return updates
