@@ -14,7 +14,7 @@ data = pd.read_csv('data/test_data.csv')
 
 def test_LinearRegression():
     x_data = data[['weekend', 'trip_time', 'act_leisure']]
-    y_data = data['trip_dist']
+    y_data = data[['trip_dist']]
 
     train_x_data, valid_x_data = x_data.iloc[:70], x_data.iloc[70:]
     train_y_data, valid_y_data = y_data.iloc[:70], y_data.iloc[70:]
@@ -27,7 +27,7 @@ def test_LinearRegression():
 
     # Symbolic Tensors
     x = T.matrix('x')
-    y = T.vector('y')
+    y = T.matrix('y')
     index = T.lscalar()
 
     # model config
