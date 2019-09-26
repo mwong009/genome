@@ -54,7 +54,7 @@ class LinearRegression(base.BaseModel):
         """
         # check if y is of the correct datatype
         if y.dtype.startswith('float'):
-            return T.mean(T.sqr(y - self.output[..., 0]))
+            return T.mean(T.sqr(y - self.output))
         else:
             raise NotImplementedError()
 
