@@ -156,9 +156,14 @@ class MultinomialLogit(base.BaseModel):
 
         Returns:
             The negative log-likelihood of the mini-batch
+
+        .. note::
+            We use `mean` so the gradient is not dependent on the size of the
+            batch. set ``mean=False`` if the optimization requires dependency on the
+            size of the batch.
         """
         # y.shape[0] is the mini-batch size
-        nll = -T.sum(T.log(self.output)[T.arange(y.shape[0]), y])
+        nll = -T.sum(T.log(self.output)[T.arange(y.shape[0]), y[..., -1]])
         if not mean:
             return nll
         else:
@@ -181,7 +186,7 @@ class MultinomialLogit(base.BaseModel):
 
         # check if y is of the correct datatype
         if y.dtype.startswith('int'):
-            return T.mean(T.neq(self.output_pred, y))
+            return T.mean(T.neq(self.output_pred, y[..., -1]))
         else:
             raise NotImplementedError()
 
