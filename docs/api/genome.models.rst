@@ -5,6 +5,7 @@
 
    genome.models.base
    genome.models.core
+   genome.models.functions
    genome.models.logit
 
 Module Contents
