@@ -14,6 +14,6 @@ def test_load_data():
         'hour_20_22', 'hour_23_1', 'hour_2_4', 'hour_5_7', 'num_coord',
         'trip_dist', 'trip_time', 'trip_aspeed', 'act_edu', 'act_health',
         'act_leisure', 'act_meal', 'act_errand', 'act_shop', 'act_home',
-        'act_work', 'act_meeting'
+        'act_work', 'act_meeting',
     ]
     assert all([a == b for a, b in zip(x_data.columns, check_columns)])

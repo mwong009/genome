@@ -51,7 +51,7 @@ def test_sgd():
     for i in range(100):
         batch_cost = test_function(train_x_data.values, train_y_data.values)
 
-    print(i, 'SGD:', batch_cost)
+    print('SGD:', batch_cost)
 
 
 def test_momentumSGD():
@@ -70,7 +70,7 @@ def test_momentumSGD():
     for i in range(100):
         batch_cost = test_function(train_x_data.values, train_y_data.values)
 
-    print('MomentumSGD', batch_cost)
+    print('MomentumSGD:', batch_cost)
 
 
 def test_nesterov_momentumSGD():
@@ -89,7 +89,7 @@ def test_nesterov_momentumSGD():
     for i in range(100):
         batch_cost = test_function(train_x_data.values, train_y_data.values)
 
-    print('Nesterov', batch_cost)
+    print('Nesterov:', batch_cost)
 
 
 def test_Adagrad():
@@ -108,7 +108,7 @@ def test_Adagrad():
     for i in range(100):
         batch_cost = test_function(train_x_data.values, train_y_data.values)
 
-    print('Adagrad', batch_cost)
+    print('Adagrad:', batch_cost)
 
 
 def test_RMSProp():
@@ -127,7 +127,7 @@ def test_RMSProp():
     for i in range(100):
         batch_cost = test_function(train_x_data.values, train_y_data.values)
 
-    print('RMSProp', batch_cost)
+    print('RMSProp:', batch_cost)
 
 
 def test_Adadelta():
@@ -146,7 +146,7 @@ def test_Adadelta():
     for i in range(100):
         batch_cost = test_function(train_x_data.values, train_y_data.values)
 
-    print('Adadelta', batch_cost)
+    print('Adadelta:', batch_cost)
 
 
 def test_Adam():
@@ -165,4 +165,4 @@ def test_Adam():
     for i in range(100):
         batch_cost = test_function(train_x_data.values, train_y_data.values)
 
-    print('Adam', batch_cost)
+    print('Adam:', batch_cost)

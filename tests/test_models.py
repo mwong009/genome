@@ -11,27 +11,27 @@ FLOATX = theano.config.floatX
 
 data = pd.read_csv('data/test_data.csv')
 
+# Symbolic Tensors
+x = T.matrix('x')
+y = T.matrix('y')
+index = T.lscalar()
+
+
+def test_BaseModel():
+    input = np.random.random(size=(4, 10))
+    output = np.random.randint(low=0, high=7, size=(4, 10))
+    model = base.BaseModel(input)
+    y = np.random.randint(low=0, high=7, size=(4, 10))
+
 
 def test_LinearRegression():
     x_data = data[['weekend', 'trip_time', 'act_leisure']]
     y_data = data[['trip_dist']]
 
-    train_x_data, valid_x_data = x_data.iloc[:70], x_data.iloc[70:]
-    train_y_data, valid_y_data = y_data.iloc[:70], y_data.iloc[70:]
-
-    train_x_shared = theano.shared(train_x_data.values.astype(FLOATX), borrow=True)
-    train_y_shared = theano.shared(train_y_data.values.astype(FLOATX), borrow=True)
-
-    valid_x_shared = theano.shared(valid_x_data.values.astype(FLOATX), borrow=True)
-    valid_y_shared = theano.shared(valid_y_data.values.astype(FLOATX), borrow=True)
-
-    # Symbolic Tensors
-    x = T.matrix('x')
-    y = T.matrix('y')
-    index = T.lscalar()
-
     # model config
     n_vars = x_data.shape[-1]
+    train_x_data, valid_x_data = x_data.iloc[:70], x_data.iloc[70:]
+    train_y_data, valid_y_data = y_data.iloc[:70], y_data.iloc[70:]
 
     model = logit.LinearRegression(input=x, n_vars=n_vars)
     mse = model.mean_squared_error(y)
@@ -46,25 +46,51 @@ def test_LinearRegression():
     )
 
     out = model.train_model(train_x_data, train_y_data)
-    print(out)
-
-
-def test_BaseModel():
-    input = np.random.random(size=(4, 10))
-    output = np.random.randint(low=0, high=7, size=(4, 10))
-    model = base.BaseModel(input)
-    y = np.random.randint(low=0, high=7, size=(4, 10))
+    print('LinearRegression: mse', out)
 
 
 def test_MultinomialLogit():
-    x = T.matrix('x')
-    model = logit.MultinomialLogit(
-        input=x, n_vars=10, n_choices=10, beta=None, asc=None)
+    x_data = data[['weekend', 'hour_8_10', 'trip_time', 'trip_aspeed', 'act_home']]
+    y_data = data[['mode']] - 1
+
+    # For Logistic Regression, y-output must be an integer TensorType
+    # T.imatrix() or T.ivector()
+    y = T.imatrix('y')
+
+    # model config
+    n_vars = x_data.shape[-1]
+    train_x_data, valid_x_data = x_data.iloc[:70], x_data.iloc[70:]
+    train_y_data, valid_y_data = y_data.iloc[:70], y_data.iloc[70:]
+
+    model = logit.MultinomialLogit(input=x, n_vars=n_vars, n_choices=7)
+    nll = model.negative_log_likelihood(y)
+    errors = model.errors(y)
+
+    model.train_model = theano.function(
+        inputs=[x, y],
+        outputs=nll,
+        updates=None,
+        givens=None,
+        allow_input_downcast=True,
+        on_unused_input='ignore'
+    )
+
+    model.validate_model = theano.function(
+        inputs=[x, y],
+        outputs=errors,
+        updates=None,
+        givens=None,
+        allow_input_downcast=True,
+        on_unused_input='ignore'
+    )
+
+    out = model.train_model(train_x_data, train_y_data)
+    print('MultinomialLogit: nll', out)
+
+    out = model.validate_model(train_x_data, train_y_data)
+    print('MultinomialLogit: error', '{0:2.2f}%%'.format(out * 100))
 
 
 def test_MLP():
-    x = T.matrix('x')
-    y = T.vector('y')
-    model = logit.MLP(
-        input=x, n_in=5, n_out=3,
-        layers=[(5, 10, T.nnet.sigmoid), (10, 3, T.nnet.softmax)])
+    layers = [(5, 10, T.nnet.sigmoid), (10, 3, T.nnet.softmax)]
+    model = logit.MLP(input=x, n_in=5, n_out=3, layers=layers)
