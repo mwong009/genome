@@ -92,5 +92,48 @@ def test_MultinomialLogit():
 
 
 def test_MLP():
-    layers = [(5, 10, T.nnet.sigmoid), (10, 3, T.nnet.softmax)]
-    model = logit.MLP(input=x, n_in=5, n_out=3, layers=layers)
+    x_data = data[['weekend', 'hour_8_10', 'trip_time', 'trip_aspeed', 'act_home']]
+    y_data = data[['mode']] - 1
+
+    # For Logistic Regression, y-output must be an integer TensorType
+    # T.imatrix() or T.ivector()
+    y = T.imatrix('y')
+
+    # model config
+    n_vars = x_data.shape[-1]
+    train_x_data, valid_x_data = x_data.iloc[:70], x_data.iloc[70:]
+    train_y_data, valid_y_data = y_data.iloc[:70], y_data.iloc[70:]
+
+    layers = [
+        (5, 10, T.nnet.sigmoid),
+        (10, 10, T.nnet.sigmoid),
+        (10, 7, T.nnet.softmax)
+    ]
+    model = logit.MLP(input=x, n_in=n_vars, n_out=7, layers=layers)
+
+    nll = model.negative_log_likelihood(y)
+    errors = model.errors(y)
+
+    model.train_model = theano.function(
+        inputs=[x, y],
+        outputs=nll,
+        updates=None,
+        givens=None,
+        allow_input_downcast=True,
+        on_unused_input='ignore'
+    )
+
+    model.validate_model = theano.function(
+        inputs=[x, y],
+        outputs=errors,
+        updates=None,
+        givens=None,
+        allow_input_downcast=True,
+        on_unused_input='ignore'
+    )
+
+    out = model.train_model(train_x_data, train_y_data)
+    print('MLP (3): nll', out)
+
+    out = model.validate_model(train_x_data, train_y_data)
+    print('MLP (3): error', '{0:2.2f}%%'.format(out * 100))
