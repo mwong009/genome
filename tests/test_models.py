@@ -48,7 +48,6 @@ def test_LinearRegression():
 
     model = linear.LinearRegression(input=x, n_vars=n_vars)
     mse = model.mean_squared_error(y)
-
     model.train_model = theano.function(
         inputs=[x, y],
         outputs=mse,
@@ -59,7 +58,7 @@ def test_LinearRegression():
     )
 
     out = model.train_model(train_x_data, train_y_data)
-    print('LinearRegression: mse', out)
+    print('MLP: mse {0:.4f}'.format(out))
 
 
 def test_MultinomialLogit():
@@ -100,10 +99,10 @@ def test_MultinomialLogit():
     )
 
     out = model.train_model(train_x_data, train_y_data)
-    print('MultinomialLogit: nll', out)
+    print('MLP: nll {0:.4f}'.format(out))
 
     out = model.validate_model(train_x_data, train_y_data)
-    print('MultinomialLogit: error', '{0:2.2f}%%'.format(out * 100))
+    print('MLP: error {0:.4f}%'.format(out * 100))
 
 
 def test_MLP():
@@ -126,6 +125,9 @@ def test_MLP():
         (10, 10, T.nnet.sigmoid),
         (10, 7, T.nnet.softmax)
     ]
+
+    n_layers = len(layers)
+
     model = dnn.MLP(input=x, n_in=n_vars, n_out=7, layers=layers)
 
     nll = model.negative_log_likelihood(y)
@@ -150,10 +152,10 @@ def test_MLP():
     )
 
     out = model.train_model(train_x_data, train_y_data)
-    print('MLP (3): nll', out)
+    print('MLP ({0:d}): nll {1:.4f}'.format(n_layers, out))
 
     out = model.validate_model(train_x_data, train_y_data)
-    print('MLP (3): error', '{0:2.2f}%%'.format(out * 100))
+    print('MLP ({0:d}): error {1:.4f}%'.format(n_layers, out * 100))
 
 
 def test_ResLogit():
@@ -168,3 +170,34 @@ def test_ResLogit():
     train_y_data, valid_y_data = y_data.iloc[:70], y_data.iloc[70:]
 
     assert train_x_data.ndim == train_y_data.ndim
+
+    n_layers = 3
+
+    model = dnn.ResLogit(input=x, n_vars=n_vars, n_choices=7, n_layers=n_layers)
+
+    nll = model.negative_log_likelihood(y)
+    errors = model.errors(y)
+
+    model.train_model = theano.function(
+        inputs=[x, y],
+        outputs=nll,
+        updates=None,
+        givens=None,
+        allow_input_downcast=True,
+        on_unused_input='ignore'
+    )
+
+    model.validate_model = theano.function(
+        inputs=[x, y],
+        outputs=errors,
+        updates=None,
+        givens=None,
+        allow_input_downcast=True,
+        on_unused_input='ignore'
+    )
+
+    out = model.train_model(train_x_data, train_y_data)
+    print('ResLogit ({0:d}): nll {1:.4f}'.format(n_layers, out))
+
+    out = model.validate_model(train_x_data, train_y_data)
+    print('ResLogit ({0:d}): error {1:.4f}%'.format(n_layers, out * 100))

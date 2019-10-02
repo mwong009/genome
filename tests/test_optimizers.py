@@ -51,7 +51,7 @@ def test_sgd():
     for i in range(100):
         result_end = test_function(train_x_data.values, train_y_data.values)
 
-    print('SGD: {0:.2f} -> {1:.2f}', result_start, result_end)
+    print('SGD: {0:.4f} -> {1:.4f}'.format(result_start, result_end))
 
 
 def test_momentumSGD():
@@ -71,7 +71,7 @@ def test_momentumSGD():
     for i in range(100):
         result_end = test_function(train_x_data.values, train_y_data.values)
 
-    print('MomentumSGD: {0:.2f} -> {1:.2f}', result_start, result_end)
+    print('MomentumSGD: {0:.4f} -> {1:.4f}'.format(result_start, result_end))
 
 
 def test_nesterov_momentumSGD():
@@ -91,7 +91,7 @@ def test_nesterov_momentumSGD():
     for i in range(100):
         result_end = test_function(train_x_data.values, train_y_data.values)
 
-    print('Nesterov: {0:.2f} -> {1:.2f}', result_start, result_end)
+    print('Nesterov: {0:.4f} -> {1:.4f}'.format(result_start, result_end))
 
 
 def test_Adagrad():
@@ -111,7 +111,7 @@ def test_Adagrad():
     for i in range(100):
         result_end = test_function(train_x_data.values, train_y_data.values)
 
-    print('Adagrad: {0:.2f} -> {1:.2f}', result_start, result_end)
+    print('Adagrad: {0:.4f} -> {1:.4f}'.format(result_start, result_end))
 
 
 def test_RMSProp():
@@ -131,7 +131,7 @@ def test_RMSProp():
     for i in range(100):
         result_end = test_function(train_x_data.values, train_y_data.values)
 
-    print('RMSProp: {0:.2f} -> {1:.2f}', result_start, result_end)
+    print('RMSProp: {0:.4f} -> {1:.4f}'.format(result_start, result_end))
 
 
 def test_Adadelta():
@@ -154,7 +154,7 @@ def test_Adadelta():
     for i in range(100):
         result_end = test_function(train_x_data.values, train_y_data.values)
 
-    print('Adadelta: {0:.2f} -> {1:.2f}', result_start, result_end)
+    print('Adadelta: {0:.4f} -> {1:.4f}'.format(result_start, result_end))
 
 
 def test_Adam():
@@ -174,4 +174,4 @@ def test_Adam():
     for i in range(100):
         result_end = test_function(train_x_data.values, train_y_data.values)
 
-    print('Adam: {0:.2f} -> {1:.2f}', result_start, result_end)
+    print('Adam: {0:.4f} -> {1:.4f}'.format(result_start, result_end))
