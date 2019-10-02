@@ -7,11 +7,18 @@ import theano.tensor as T
 
 def mean_squared_error(self, y):
     """
-    Returns a `float` representing the mean squared error (MSE)
+    mean_squared_error(self, y)
 
-    Args:
-        y: A symbolic ``Tensor`` variable of the ground-truth
-    Returns:
+    Returns a `floatX` value of the mean squared error (MSE)
+
+    Parameters
+    ----------
+    y: theano.tensor.TensorVariable
+        A symbolic Tensor variable of the ground-truth data
+
+    Returns
+    -------
+    floatX:
         The MSE of the linear model
     """
     # check if y is of the correct datatype
@@ -23,16 +30,22 @@ def mean_squared_error(self, y):
 
 def negative_log_likelihood(self, y, mean=True):
     """
+    negative_log_likelihood(self, y, mean=True)
+
     Returns the mean or sum of the negative log likelihood
 
-    Args:
-        y: A symbolic ``Tensor`` variable of the ground-truth
-        mean (bool): checks whether to average `True` the negative log-likelihood
+    Parameters
+    ----------
+    y: theano.tensor.TensorVariable
+        A symbolic Tensor variable of the ground-truth data
 
-    Returns:
+    Returns
+    -------
+    floatX:
         The negative log-likelihood of the mini-batch
 
-    .. note::
+    Note
+    ----
         We use `mean` so the gradient is not dependent on the size of the
         batch. set ``mean=False`` if the optimization requires dependency on the
         size of the batch.
@@ -47,13 +60,19 @@ def negative_log_likelihood(self, y, mean=True):
 
 def errors(self, y):
     """
-    Returns a `float` representing the errors in the minibatch
+    errors(self, y)
 
-    Args:
-        y: A symbolic ``Tensor`` variable of the ground-truth
+    Returns a `floatX` value of the error
 
-    Returns:
-        The mean error rate of predictions
+    Parameters
+    ----------
+    y: theano.tensor.TensorVariable
+        A symbolic Tensor variable of the ground-truth data
+
+    Returns
+    -------
+    floatX:
+        The error rate
     """
     # check if y has same dimension of y_pred
     if y.ndim != self.output.ndim:
@@ -69,14 +88,19 @@ def errors(self, y):
 
 def hessians(self, y):
     """
+    hessians(self, y)
+
     Return a list of hessians w.r.t. to the model parameters
 
-    Args:
-        y: A symbolic ``Tensor`` variable of the ground-truth
+    Parameters
+    ----------
+    y: theano.tensor.TensorVariable
+        A symbolic Tensor variable of the ground-truth data
 
-    Returns:
-        A list of hessian ``TensorSharedVariable`` matrices corresponding to each
-            parameter
+    Returns
+    -------
+    list of `theano.shared.TensorSharedVariable`:
+        A list of hessian matrices corresponding to each parameter
     """
     hessian_matrix = []
     for param in self.params:

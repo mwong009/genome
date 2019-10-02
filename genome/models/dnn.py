@@ -74,13 +74,20 @@ class ResLogit(MultinomialLogit):
     heterogeneity in the data. It is an extension of the :class:`MultinomialLogit`
     class.
 
-    Args:
-        input: A symbolic ``Tensor`` input
-        n_vars (int): Number of input variables
-        n_choices (int): Number of choice alternatives
-        n_layers (int): Number of residual layers
-        beta: :math:`\\beta` parameters - A ``TensorSharedVariable`` (optional)
-        asc: Alternative Specific Constants - A ``TensorSharedVariable`` (optional)
+    Parameters
+    ----------
+    input: theano.tensor.TensorVariable
+        symbolic variable that describes the input
+    n_vars: int
+        Number of input variables
+    n_choices: int
+        Number of choice alternatives
+    n_layers: int
+        Number of residual layers
+    beta: theano.shared.TensorSharedVariable, optional
+        :math:`\\beta` parameters
+    asc: theano.shared.TensorSharedVariable, optional
+        Alternative Specific Constants
 
     """
     def __init__(self, input, n_vars, n_choices, n_layers, beta=None, asc=None):
@@ -92,14 +99,16 @@ class ResLogit(MultinomialLogit):
 
         resnet_input = T.dot(self.input, self.beta)
 
-        for n, layer in range(self.n_layers):
+        for n in range(self.n_layers):
             if n == 0:
                 layer_input = resnet_input
             else:
                 layer_input = self.resnet_layers[-1].output
 
+            residual_shape = (n_choices, n_choices)
+
             resnet_layer = core.ResNetLayer(
-                input=layer_input, size=(n_choices, n_choices), layer_num=n)
+                input=layer_input, size=residual_shape, layer_num=n)
             self.resnet_layers.append(resnet_layer)
             self.params.extend(resnet_layer.params)
             self.params_m.extend(resnet_layer.params_m)

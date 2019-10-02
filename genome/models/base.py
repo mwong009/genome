@@ -3,31 +3,34 @@
 
 
 class BaseModel:
-    """
-    Creates the backbone of the other models
+    """Base model class
 
-    Args:
-        input (:obj:`theano.tensor.TensorVariable`): symbolic variable that describes
-            the input
+    Stores generic parameters and tracking the input
 
+    Parameters
+    ----------
+    input: theano.tensor.TensorVariable
+        Symbolic variable that describes the input.
     """
     def __init__(self, input):
         self.input = input
 
 
 class MultiLayerModel(BaseModel):
-    """
-    Base class for multi-layered models
+    """Base model class for multi-layered models
 
-    Args:
-        input (:class:`theano.tensor.TensorVariable`): symbolic variable that describes
-            the input
-        n_in (int): Number of input nodes
-        n_out (int): Number of output nodes
-        layers (list): A list of tuples that defines the number of
-            input connection, output connection and layer activation function, example:
-            ``[(n_in, n_hidden, activation),... (n_hidden, n_out, activation)]``
-
+    Parameters
+    ----------
+    input: theano.tensor.TensorVariable
+        symbolic variable that describes the input
+    n_in :int
+        Number of input nodes
+    n_out: int
+        Number of output nodes
+    layers: list of tuple
+        Defines the number of input connection, output connection and layer
+        activation function. Example:
+        ``[(n_in, n_hidden, activation),... (n_hidden, n_out, activation)]``
     """
     def __init__(self, input, n_in, n_out, layers):
         super().__init__(input)
