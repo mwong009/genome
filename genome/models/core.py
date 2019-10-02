@@ -1,7 +1,6 @@
-"""
-Layer templates for creating deep neural networks
+# -*- coding: utf-8 -*-
+"""Layer templates for creating deep neural networks"""
 
-"""
 import numpy as np
 import theano
 import theano.tensor as T

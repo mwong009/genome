@@ -1,7 +1,5 @@
-"""
-Base classes for model types.
-
-"""
+# -*- coding: utf-8 -*-
+"""Base classes for model types"""
 
 
 class BaseModel:
