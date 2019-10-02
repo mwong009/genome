@@ -1,6 +1,6 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Test function description:
+"""Test script for optimizers
 
 Invokes the optimizers module on a linear regression model
 
@@ -11,10 +11,9 @@ Args:
     train_x: 70% data slice
     train_y: 30% data slice
     n_vars (int): number of x variables used (3)
-
 """
 from genome.optimizers import *
-from genome.models import logit
+from genome.models import linear, logit, dnn
 
 import theano
 import theano.tensor as T
@@ -36,7 +35,7 @@ y = T.matrix('y')
 
 
 def test_sgd():
-    model = logit.LinearRegression(input=x, n_vars=n_vars)
+    model = linear.LinearRegression(input=x, n_vars=n_vars)
     sgd = SGD(model.params)
     rmse = T.sqrt(model.mean_squared_error(y))
     update = sgd.update(rmse, model.params)
@@ -48,14 +47,15 @@ def test_sgd():
         allow_input_downcast=True,
     )
 
+    result_start = test_function(train_x_data.values, train_y_data.values)
     for i in range(100):
-        batch_cost = test_function(train_x_data.values, train_y_data.values)
+        result_end = test_function(train_x_data.values, train_y_data.values)
 
-    print('SGD:', batch_cost)
+    print('SGD: {0:.2f} -> {1:.2f}', result_start, result_end)
 
 
 def test_momentumSGD():
-    model = logit.LinearRegression(input=x, n_vars=n_vars)
+    model = linear.LinearRegression(input=x, n_vars=n_vars)
     momsgd = MomentumSGD(model.params)
     rmse = T.sqrt(model.mean_squared_error(y))
     update = momsgd.update(rmse, model.params)
@@ -67,14 +67,15 @@ def test_momentumSGD():
         allow_input_downcast=True,
     )
 
+    result_start = test_function(train_x_data.values, train_y_data.values)
     for i in range(100):
-        batch_cost = test_function(train_x_data.values, train_y_data.values)
+        result_end = test_function(train_x_data.values, train_y_data.values)
 
-    print('MomentumSGD:', batch_cost)
+    print('MomentumSGD: {0:.2f} -> {1:.2f}', result_start, result_end)
 
 
 def test_nesterov_momentumSGD():
-    model = logit.LinearRegression(input=x, n_vars=n_vars)
+    model = linear.LinearRegression(input=x, n_vars=n_vars)
     nesterov = MomentumSGD(model.params, use_nesterov=True)
     rmse = T.sqrt(model.mean_squared_error(y))
     update = nesterov.update(rmse, model.params)
@@ -86,14 +87,15 @@ def test_nesterov_momentumSGD():
         allow_input_downcast=True,
     )
 
+    result_start = test_function(train_x_data.values, train_y_data.values)
     for i in range(100):
-        batch_cost = test_function(train_x_data.values, train_y_data.values)
+        result_end = test_function(train_x_data.values, train_y_data.values)
 
-    print('Nesterov:', batch_cost)
+    print('Nesterov: {0:.2f} -> {1:.2f}', result_start, result_end)
 
 
 def test_Adagrad():
-    model = logit.LinearRegression(input=x, n_vars=n_vars)
+    model = linear.LinearRegression(input=x, n_vars=n_vars)
     adagrad_sgd = Adagrad(model.params)
     rmse = T.sqrt(model.mean_squared_error(y))
     update = adagrad_sgd.update(rmse, model.params)
@@ -105,14 +107,15 @@ def test_Adagrad():
         allow_input_downcast=True,
     )
 
+    result_start = test_function(train_x_data.values, train_y_data.values)
     for i in range(100):
-        batch_cost = test_function(train_x_data.values, train_y_data.values)
+        result_end = test_function(train_x_data.values, train_y_data.values)
 
-    print('Adagrad:', batch_cost)
+    print('Adagrad: {0:.2f} -> {1:.2f}', result_start, result_end)
 
 
 def test_RMSProp():
-    model = logit.LinearRegression(input=x, n_vars=n_vars)
+    model = linear.LinearRegression(input=x, n_vars=n_vars)
     rmsprop_sgd = RMSProp(model.params)
     rmse = T.sqrt(model.mean_squared_error(y))
     update = rmsprop_sgd.update(rmse, model.params)
@@ -124,14 +127,15 @@ def test_RMSProp():
         allow_input_downcast=True,
     )
 
+    result_start = test_function(train_x_data.values, train_y_data.values)
     for i in range(100):
-        batch_cost = test_function(train_x_data.values, train_y_data.values)
+        result_end = test_function(train_x_data.values, train_y_data.values)
 
-    print('RMSProp:', batch_cost)
+    print('RMSProp: {0:.2f} -> {1:.2f}', result_start, result_end)
 
 
 def test_Adadelta():
-    model = logit.LinearRegression(input=x, n_vars=n_vars)
+    model = linear.LinearRegression(input=x, n_vars=n_vars)
     adadelta_sgd = Adadelta(model.params)
     rmse = T.sqrt(model.mean_squared_error(y))
     update = adadelta_sgd.update(rmse, model.params)
@@ -146,11 +150,15 @@ def test_Adadelta():
     for i in range(100):
         batch_cost = test_function(train_x_data.values, train_y_data.values)
 
-    print('Adadelta:', batch_cost)
+    result_start = test_function(train_x_data.values, train_y_data.values)
+    for i in range(100):
+        result_end = test_function(train_x_data.values, train_y_data.values)
+
+    print('Adadelta: {0:.2f} -> {1:.2f}', result_start, result_end)
 
 
 def test_Adam():
-    model = logit.LinearRegression(input=x, n_vars=n_vars)
+    model = linear.LinearRegression(input=x, n_vars=n_vars)
     adam_sgd = Adam(model.params)
     rmse = T.sqrt(model.mean_squared_error(y))
     update = adam_sgd.update(rmse, model.params)
@@ -162,7 +170,8 @@ def test_Adam():
         allow_input_downcast=True,
     )
 
+    result_start = test_function(train_x_data.values, train_y_data.values)
     for i in range(100):
-        batch_cost = test_function(train_x_data.values, train_y_data.values)
+        result_end = test_function(train_x_data.values, train_y_data.values)
 
-    print('Adam:', batch_cost)
+    print('Adam: {0:.2f} -> {1:.2f}', result_start, result_end)

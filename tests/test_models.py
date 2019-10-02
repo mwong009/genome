@@ -1,6 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from genome.models import base, logit
+"""Test script for models
+
+Invokes the models module, creates MLP, MNL, ResLogit, Regression
+Args:
+    data (pandas.DataFrame): 100 row sample of the MTLTrajet dataset
+    x_data: (100, 3) :class:``pandas.DataFrame`` object
+    y_data: (100, 1) :class:``pandas.DataFrame`` object
+    train_x: 70% data slice
+    train_y: 30% data slice
+    n_vars (int): number of x variables used (3)
+"""
+from genome.models import base, linear, logit, dnn
 
 import numpy as np
 import pandas as pd
@@ -33,7 +44,9 @@ def test_LinearRegression():
     train_x_data, valid_x_data = x_data.iloc[:70], x_data.iloc[70:]
     train_y_data, valid_y_data = y_data.iloc[:70], y_data.iloc[70:]
 
-    model = logit.LinearRegression(input=x, n_vars=n_vars)
+    assert train_x_data.ndim == train_y_data.ndim
+
+    model = linear.LinearRegression(input=x, n_vars=n_vars)
     mse = model.mean_squared_error(y)
 
     model.train_model = theano.function(
@@ -61,6 +74,8 @@ def test_MultinomialLogit():
     n_vars = x_data.shape[-1]
     train_x_data, valid_x_data = x_data.iloc[:70], x_data.iloc[70:]
     train_y_data, valid_y_data = y_data.iloc[:70], y_data.iloc[70:]
+
+    assert train_x_data.ndim == train_y_data.ndim
 
     model = logit.MultinomialLogit(input=x, n_vars=n_vars, n_choices=7)
     nll = model.negative_log_likelihood(y)
@@ -104,12 +119,14 @@ def test_MLP():
     train_x_data, valid_x_data = x_data.iloc[:70], x_data.iloc[70:]
     train_y_data, valid_y_data = y_data.iloc[:70], y_data.iloc[70:]
 
+    assert train_x_data.ndim == train_y_data.ndim
+
     layers = [
         (5, 10, T.nnet.sigmoid),
         (10, 10, T.nnet.sigmoid),
         (10, 7, T.nnet.softmax)
     ]
-    model = logit.MLP(input=x, n_in=n_vars, n_out=7, layers=layers)
+    model = dnn.MLP(input=x, n_in=n_vars, n_out=7, layers=layers)
 
     nll = model.negative_log_likelihood(y)
     errors = model.errors(y)
@@ -137,3 +154,17 @@ def test_MLP():
 
     out = model.validate_model(train_x_data, train_y_data)
     print('MLP (3): error', '{0:2.2f}%%'.format(out * 100))
+
+
+def test_ResLogit():
+    x_data = data[['weekend', 'hour_8_10', 'trip_time', 'trip_aspeed', 'act_home']]
+    y_data = data[['mode']] - 1
+
+    y = T.imatrix('y')
+
+    # model config
+    n_vars = x_data.shape[-1]
+    train_x_data, valid_x_data = x_data.iloc[:70], x_data.iloc[70:]
+    train_y_data, valid_y_data = y_data.iloc[:70], y_data.iloc[70:]
+
+    assert train_x_data.ndim == train_y_data.ndim
