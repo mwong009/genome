@@ -8,6 +8,7 @@ The following are some of the logit type models already implemented:
     - latent class logit
     - ordered logit (P-logit, B-logit)
     - nested logit
+    - mixed logit
 """
 from genome.models import base
 from genome.models import functions as fn

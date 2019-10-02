@@ -15,18 +15,23 @@ class MLP(base.MultiLayerModel):
     """
     Initializes a Multilayer perceptron model
 
-    Args:
-        input: A symbolic ``Tensor`` input
-        n_in (int): Number of input variables
-        n_out (int): Number of output variables
-        layers (list): A list of tuples of ``TensorSharedVariable`` that defines the
-            number of input connection, output connection and layer activation function,
-            for example: ``[(n_in, n_hidden, activation),... (n_hidden, n_out,
-            activation)]``
+    Parameters
+    ----------
+    input: theano.tensor.TensorVariable
+        symbolic variable that describes the input
+    n_in: int
+        Number of input variables
+    n_out:int
+        Number of output variables
+    layers: list of theano.shared.TensorSharedVariable
+        Defines the number of input connection, output connection and layer activation
+        function. Example:
+        ``[(n_in, n_hidden, activation),... (n_hidden, n_out, activation)]``
 
-    Example:
-        >>> x = T.matrix('x')
-        >>> model = MLP(input=x, n_in=5, n_out=2, layers=[(5, 4), (4, 2)])
+    Example
+    -------
+    >>> x = T.matrix('x')
+    >>> model = MLP(input=x, n_in=5, n_out=2, layers=[(5, 4), (4, 2)])
 
     """
     def __init__(self, input, n_in, n_out, layers):
