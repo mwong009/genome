@@ -28,7 +28,7 @@ Welcome to Genome
 =================
 
 .. toctree::
-    :maxdepth: 5
+    :maxdepth: 2
     :caption: Contents:
 
     about
