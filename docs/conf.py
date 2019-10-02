@@ -87,6 +87,10 @@ autodoc_default_options = {
     'undoc-members': True
 }
 
+# -- Options for todo --------------------------------------------------------
+
+todo_include_todos = True
+
 # -- Options for mock imports ------------------------------------------------
 
 autodoc_mock_imports = ["theano"]
