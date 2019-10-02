@@ -1,5 +1,5 @@
-"""
-TODO: Write description on :mod:`optimizers.py`
+# -*- coding: utf-8 -*-
+"""Optimizers for model estimation
 
 Genome implements various optimizers for model estimation.
 
