@@ -4,7 +4,7 @@
 The following are some of the logit type models already implemented:
 - multinomial logit
 
-.. TODO::
+.. todo::
     - latent class logit
     - ordered logit (P-logit, B-logit)
     - nested logit
