@@ -42,4 +42,5 @@ class LinearRegression(base.BaseModel):
         self.output = T.dot(input, self.W) + self.b
 
     def mean_squared_error(self, y):
+        """see: :func:`~genome.models.functions.mean_squared_error`"""
         return fn.mean_squared_error(self, y)

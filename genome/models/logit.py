@@ -62,7 +62,9 @@ class MultinomialLogit(base.BaseModel):
         self.output_pred = T.argmax(self.output, axis=1)
 
     def negative_log_likelihood(self, y):
+        """see: :func:`~genome.models.functions.negative_log_likelihood`"""
         return fn.negative_log_likelihood(self, y)
 
     def errors(self, y):
+        """see: :func:`~genome.models.functions.errors`"""
         return fn.errors(self, y)
