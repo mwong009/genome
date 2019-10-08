@@ -1,7 +1,7 @@
-"""
-Description of Genome.
-"""
+"""Genome"""
+from genome.core import Environment
+from genome.events import Setup
 
-__license__ = "MIT"
-__revision__ = "0.2.0"
-__docformat__ = "reStructuredText"
+# Dry run
+# env = genome.Environment()
+# env.setup(data='data/test_data.csv')
