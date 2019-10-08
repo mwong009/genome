@@ -18,8 +18,6 @@ import pandas as pd
 import theano
 import theano.tensor as T
 
-FLOATX = theano.config.floatX
-
 data = pd.read_csv('data/test_data.csv')
 
 # Symbolic Tensors
