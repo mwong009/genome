@@ -23,7 +23,7 @@ library.
 
 Genome primary interface is a basic command-line script based Python
 software. Using a script allows users to describe a model ‘recipe’. The
-core of Genome uses the Theano engine to train neural network models. It
+base of Genome uses the Theano engine to train neural network models. It
 is adapted to work on more conventional style discrete choice models and
 econometric analysis. It allows extremely fast computational speedup
 using tensor based computations. This software can be configured to

@@ -35,6 +35,9 @@ class MultinomialLogit(base.BaseModel):
     def __init__(self, input, n_vars, n_choices, beta=None, asc=None):
         super().__init__(input)
 
+        if type(n_choices) == dict:
+            n_choices = len(n_choices)
+
         if asc is None:
             init = np.zeros((n_choices,), dtype=FLOATX)
             asc = theano.shared(value=init, name='asc', borrow=True)

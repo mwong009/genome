@@ -1,7 +1,7 @@
-:mod:`genome.models.core`
+:mod:`genome.models.base`
 =========================
 
-.. automodule:: genome.models.core
+.. automodule:: genome.models.base
    :members:
    :undoc-members:
    :show-inheritance:

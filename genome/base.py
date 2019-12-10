@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Core modules"""
+"""Base modules"""
 
 
 class BaseEnvironment:
@@ -7,7 +7,7 @@ class BaseEnvironment:
         pass
 
     def setup(self, **kwargs):
-        """Setup the core components in the simulation envionment
+        """Setup the base components in the simulation envionment
 
         setup(data)
 
