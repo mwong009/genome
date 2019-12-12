@@ -32,11 +32,14 @@ class MultinomialLogit(base.BaseModel):
         asc: Alternative Specific Constants - A ``TensorSharedVariable`` (optional)
 
     """
-    def __init__(self, input, n_vars, n_choices, beta=None, asc=None):
+    def __init__(self, input, n_vars, n_choices, beta=None, asc=None, ref=None):
         super().__init__(input)
 
         if type(n_choices) == dict:
             n_choices = len(n_choices)
+            self.choices = list(n_choices.values())
+        elif type(n_choices) == int:
+            self.choices = list(np.arange(7).astype(str))
 
         if asc is None:
             init = np.zeros((n_choices,), dtype=FLOATX)
@@ -62,7 +65,7 @@ class MultinomialLogit(base.BaseModel):
 
         self.params_m = [self.beta_m, self.asc_m]
 
-        self.output = T.nnet.softmax(T.dot(input, self.beta) + self.asc)
+        self.output = T.nnet.softmax(T.dot(self.input, self.beta) + self.asc)
         self.output_pred = T.argmax(self.output, axis=1)
 
     def negative_log_likelihood(self, y):
