@@ -8,11 +8,9 @@ Overview
     :stub-columns: 1
 
     * - tests
-      - | |travis|
-        | |codecov|
+      - | |travis| |codecov|
     * - package
-      - | |version| |wheel| |supported-versions| |supported-implementations|
-        | |commits-since|
+      - | |commits-since|
 
 .. |travis| image:: https://api.travis-ci.com/mwong009/genome.svg?branch=master
     :alt: Travis-CI Build Status
@@ -71,7 +69,6 @@ To use the project:
 .. code-block:: python
 
     import genome
-    genome.longest()
 
 
 Development
