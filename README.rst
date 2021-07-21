@@ -36,9 +36,9 @@ Overview
     :alt: Supported implementations
     :target: https://pypi.org/project/genome
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/mwong009/genome/v0.1.0.svg
+.. |commits-since| image:: https://img.shields.io/github/commits-since/mwong009/genome/v0.1.1.svg
     :alt: Commits since latest release
-    :target: https://github.com/mwong009/genome/compare/v0.1.0...master
+    :target: https://github.com/mwong009/genome/compare/v0.1.1...master
 
 
 

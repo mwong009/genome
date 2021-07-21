@@ -23,7 +23,7 @@ def read(*names, **kwargs):
 
 setup(
     name='genome',
-    version='0.1.0',
+    version='0.1.1',
     license='MIT',
     description='Deep learning library for discrete choice modelling',
     long_description='%s\n%s' % (
